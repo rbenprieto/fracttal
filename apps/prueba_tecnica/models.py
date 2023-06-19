@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class Medicion(models.Model):
     id = models.AutoField(primary_key=True, editable=False, unique=True)
     fecha = models.DateTimeField()
@@ -10,5 +11,3 @@ class Medicion(models.Model):
     class Meta:
         verbose_name = "Medición"
         verbose_name_plural = "Mediciones"
-
-    

@@ -1,0 +1,1 @@
+apps/prueba_tecnica/sensor.csv filter=lfs diff=lfs merge=lfs -text

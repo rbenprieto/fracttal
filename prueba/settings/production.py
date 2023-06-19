@@ -2,14 +2,13 @@ import os
 
 from .base import *
 
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = "RENDER" not in os.environ
 
 if not DEBUG:
     STATIC_URL = "/static/"
     STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
+        os.path.join(BASE_DIR, "static"),
     ]
     STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
     CSRF_COOKIE_SECURE = True
