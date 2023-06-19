@@ -6,7 +6,7 @@ from rest_framework import status
 
 from apps.prueba_tecnica.models import Medicion
 from apps.prueba_tecnica.serializers import MedicionesSerializer
-from apps.prueba_tecnica.utils import read_csv
+from apps.prueba_tecnica.utils import read_csv, processing_data, data_for_saving
 
 
 class MedicionesView(generics.ListCreateAPIView):
@@ -38,4 +38,15 @@ class MedicionesView(generics.ListCreateAPIView):
         )
 
     def post(self, request):
-        return Response("holis")
+        # Obtengo la data enviada en json, la proceso y la imprimo en consola
+        data = request.data
+        df = processing_data(data)
+        print(df)
+
+        # Proceso la información para ahora guardarla en DB
+        data_for_save = data_for_saving(df)
+        serializer = self.serializer_class(data=data_for_save, many=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response({"detail": "Guardado exitoso"}, status=status.HTTP_201_CREATED)

@@ -1,4 +1,5 @@
 import pandas as pd
+from datetime import datetime
 
 
 def read_csv():
@@ -93,3 +94,43 @@ def format_data(data):
         list_measurements_json.append(register_json)
 
     return list_measurements_json
+
+
+def processing_data(data):
+    records = []
+
+    for item in data:
+        # Obtener los valores de la fecha, hora y estado
+        timestamp_str = item['fecha']
+        timestamp = datetime.strptime(timestamp_str, '%Y-%m-%d %H:%M:%S')
+        date = timestamp.date().strftime('%Y-%m-%d')
+        time = timestamp.time().strftime('%H:%M:%S')
+
+        if 20 < item["medicion"] < 30:
+            record = {
+                'fecha': date,
+                'hora': time,
+                'sensor': item["sensor"],
+                'medicion': item["medicion"],
+                'estado': item['estado']
+            }
+            records.append(record)
+
+    df = pd.DataFrame(records)
+    return df
+
+
+def data_for_saving(data):
+    list_data = []
+    for index, row in data.iterrows():
+        fecha = datetime.strptime(row["fecha"], "%Y-%m-%d").date()
+        hora = datetime.strptime(row["hora"], "%H:%M:%S").time()
+        dict = {
+            "fecha": datetime.combine(fecha, hora),
+            "sensor": row["sensor"],
+            "valor_medicion": row["medicion"],
+            "machine_status": row["estado"],
+        }
+        list_data.append(dict)
+    
+    return list_data
