@@ -98,7 +98,6 @@ def format_data(data):
 
 def processing_data(data):
     records = []
-
     for item in data:
         # Obtener los valores de la fecha, hora y estado
         timestamp_str = item['fecha']
@@ -132,5 +131,5 @@ def data_for_saving(data):
             "machine_status": row["estado"],
         }
         list_data.append(dict)
-    
+        
     return list_data
