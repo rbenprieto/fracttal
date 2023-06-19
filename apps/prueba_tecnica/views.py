@@ -56,6 +56,9 @@ class MedicionesView(generics.ListCreateAPIView):
 
 
 class MedicionesVariablesView(APIView):
+    """
+    Endpoint to read a dinamic csv file with diferents values
+    """
 
     def post(self, request):
         file = request.FILES.get("sensor")
