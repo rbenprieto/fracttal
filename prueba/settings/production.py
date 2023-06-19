@@ -28,6 +28,6 @@ if RENDER_EXTERNAL_HOSTNAME:
 DATABASES = {
     "default": dj_database_url.config(
         default=f"postgresql://{os.environ.get('USER_FRACTTAL')}:{os.environ.get('PASSWORD_FRACTTAL')}@{os.environ.get('HOST_FRACTTAL')}:{os.environ.get('PORT_FRACTTAL')}/{os.environ.get('NAME_FRACTTAL')}",
-        conn_max_age=1000,
+        conn_max_age=100000,
     )
 }
