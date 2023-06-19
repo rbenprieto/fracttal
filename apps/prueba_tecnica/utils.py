@@ -133,3 +133,40 @@ def data_for_saving(data):
         list_data.append(dict)
         
     return list_data
+
+def read_csv_update(df):
+    """
+    Util function for read the csv file, filter data and return results
+    """
+
+    # Se lee el archivo y limito las columnas de estudio del df
+    df = df[["timestamp", "sensor_07", "sensor_47", "machine_status"]]
+
+    # Inicia limpieza de datos
+    # Convierto la columna timestamp a formato datetime, lo que no pueda convertir lo pone nulo
+    df["timestamp"] = pd.to_datetime(df["timestamp"], errors="coerce")
+
+    # Elimina los valores nulos que existan en la columna timestamp. Así me aseguro que filtraré sobre fechas, evitando excepciones
+    df.dropna(subset=["timestamp"])
+
+    # Hago el filtro en el año 2018 y el mes de abril
+    df = df[(df["timestamp"].dt.year == 2018) & (df["timestamp"].dt.month == 4)]
+
+    # Filtro entre los valores determinados el el sensor 07 Ó 47, importante mencionar que no se especificó que ambos sensores debían cumplir esta condición
+    df = df[
+        (df["sensor_07"] > 20) & (df["sensor_07"] < 30)
+        | (df["sensor_47"] > 20) & (df["sensor_47"] < 30)
+    ]
+
+    # Asigno una columna que se llama id y es consecutiva para saber cuantos registros cumplen con la condición
+    df["id"] = range(1, len(df) + 1)
+
+    # Organizo las columnas en orden
+    df = df.reindex(
+        columns=["id", "timestamp", "machine_status", "sensor_07", "sensor_47"]
+    )
+
+    list_measurements_json = format_data(df)
+
+    # Devuelvo la información en formato json
+    return list_measurements_json
